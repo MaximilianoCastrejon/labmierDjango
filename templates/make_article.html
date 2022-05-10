@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {# Cargamos la librería #}
+	{% load bootstrap4 %}
+ 
+	{# CSS Bootstrap #}
+	{% bootstrap_css %}
+
+<!--Div for Background-->
+<div class="bg text-center">
+
+  <!--Div for Centered Text & Input--> 
+  <div class="centered">
+   
+     <p class="firstLine"> W &nbsp;R &nbsp;I &nbsp;T &nbsp;E &nbsp;- &nbsp;A &nbsp;R &nbsp;T &nbsp;I &nbsp;C &nbsp;L &nbsp;E </p>
+
+    <p class="form-welcome">Welcome, {{ user.username|capfirst }}, {{ id }}</p>
+    <p class="instruction">Fill this to publish your article</p>
+
+    <form action="" method=POST>
+    	{% csrf_token %}
+    	{{ form.as_p }}
+    <p> <input class="InputStyle" placeholder="Email me when it's ready"> </p>
+    <input type="submit" name="" value="Submit" class="btn btn-primary">
+    </form>
+    
+
+
+    </div>
+
+    <!--Div for bottom Icons-->
+<div class="social-btn">
+			<a href="#"  title="Facebook"><i class="fa fa-facebook"></i></a>
+			<a href="#"  title="Twitter"><i class="fa fa-twitter"></i></a>
+		
+</div>
+   
+  </div>
+{% endblock %}

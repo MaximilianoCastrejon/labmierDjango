@@ -1,0 +1,98 @@
+{% extends 'base.html' %} <!-- replace what is in <file> but load this file-->
+
+{% block content %}
+<section class="home-section">
+
+	{% load i18n %}
+	<div class="dropdown">
+	<form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+		<label for="selectLang">Language:</label>
+		<input id="selectLang" name="next" type="hidden" value="{{ redirect_to }}">
+			<select name="language">
+			{% get_current_language as LANGUAGE_CODE %}
+			{% get_available_languages as LANGUAGES %}
+			{% get_language_info_list for LANGUAGES as languages %}
+			{% for language in languages %}
+				<option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+				{{ language.name_local }} ({{ language.code }})
+				</option>
+			{% endfor %}
+			</select>
+		<input type="submit" value="Go">
+	</form>
+	</div>
+<br>
+	<div class="text">Trending</div>
+	<br>
+	<div class="dropdown">
+		<div class="pseudoMargin">
+			<div class="dropbtn">Order by
+				<div class="dropdown-content">
+				<a href="#" id="recentArticles">Most recent</a>
+				<a href="#" id="recentViews">Trending</a>
+				<a href="#" id="allTimeViews">Most viewed</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- 		<div class="articleSection">
+			<div class="articleBlocksContainer">  -->
+	<!-- TODO Set up a for loop to add li elements with the article object information -->
+<!-- 	{% for id in displayArticlesNum %}
+	<ul>
+ 	<a href="{% url 'read_article' 'art_id=article.id' %}">
+			<div class="articleBlock">
+				<li class="titleBlock">{{ id.title }}</li>
+					<li class="articleBlockContent">{{ id.content }}</li>
+					<li class="author">{{ id.author }}</li>
+					<li class="updatedat">{{ id.updated_at }}</li>
+					<li><img class="articleBlockImg" src=""></li>
+			</div>
+ 	</a>
+	</ul>
+		{% endfor %}
+</div>
+ -->
+<!-- ARTICLE CARDS -->
+<div class="articleSection">
+	<div class="articleBlocksContainer"> 
+			<div class="container">
+		{% for article in article_list %}
+				<div class="card">
+					<div class="{% if article.header_image.url == '/media/default-header.png' %} default_header {% else %} card-header  {% endif %}">					
+						<img src="{{ article.header_image.url }}" alt="header image" />
+					</div>
+					<div class="card-body">
+						<span class="tag tag-teal">{{ article.main_tag }}</span>
+						<h4>{{ article.title|truncatechars:20 }}</h4>
+						<p>{{ article.content|truncatechars:150 }}</p>
+						<div class="author">
+							<img src="{{ article.author.profile_picture.url }}" alt="author" />
+							<div class="article-meta">
+								<h5>{{article.author.name}}</h5>
+								<p>{{article.updated_at}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+		{% endfor %}
+			</div>
+	</div>
+</div>
+
+		</div>
+	<!-- TODO Set upt its css -->
+	<!-- TODO Set up auto-translation of the articles -->
+<p>sdofnsjdvnsvnslvsldvkm</p>
+<p>sdofnsjdvnsvnslvsldvkm</p>
+<p>sdofnsjdvnsvnslvsldvkm</p>
+<p>sdofnsjdvnsvnslvsldvkm</p>
+<p>sdofnsjdvnsvnslvsldvkm</p>
+<p>sdofnsjdvnsvnslvsldvkm</p>
+</section>
+
+<footer></footer>
+{% endblock %}
+
+<!-- BASIC_DIR }}/{{article.author.profile_pictur -->
