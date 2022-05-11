@@ -32,22 +32,20 @@ class Users(models.Model):
 	password = models.CharField(max_length=50)
 	profile_picture = models.ImageField(default='user-default.png', null=True, blank=True)
 
+	def __str__(self):
+		return self.name
+
 
 class Article(TimeStampMixin):
 	title = models.CharField(null=False, max_length=50, unique=True)
 	content = models.TextField(null=False)
 	numVisits = models.IntegerField(null=True, auto_created=True)
 	tags = models.CharField(null=True, max_length=200)
-	author = models.ForeignKey(Users, on_delete=models.CASCADE, default="Annon")
+	author = models.ForeignKey(Users, on_delete=models.CASCADE)
 	header_image = models.ImageField(default='default-header.png', null=True, blank=True)
 
 	def __str__(self):
 		return self.title
-
-class ArticleForm(ModelForm):
-	class Meta:
-		model = Article
-		fields = ('title', 'content', 'author')
 
 	# class Meta:
 	# 	constraints = [

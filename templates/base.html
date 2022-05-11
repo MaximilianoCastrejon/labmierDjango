@@ -57,7 +57,7 @@
           <span class="tooltip">User</span>
         </li>
         <li>
-          <a href="{% url 'messages' %}">
+          <a href="{% url 'inbox' %}">
             <i class="bx bx-chat"></i>
             <span class="links_name">Messages</span>
           </a>
@@ -102,12 +102,19 @@
           <div class="profile-details">
             <!--<img src="profile.jpg" alt="profileImg">-->
             <div class="name_job">
-              <!-- { % user % } -->
+            {% if user.is_authenticated %}
               <div class="name">{{ user.username }}</div>
               <div class="job">Web designer</div>
+            {% else %}
+              <a class="name" href="{% url 'login' %}">Login</a>
+            {% endif %}
             </div>
           </div>
+          {% if user.is_authenticated %}
           <a href="{% url 'logout' %}"><i class="not_style bx bx-log-out" id="log_out"></i></a>
+          {% else %}
+          <a href=""></a>
+          {% endif %}
         </li>
       </ul>
     </div>

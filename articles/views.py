@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, logout, login
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Article, Users
-from .forms import RegisterUserForm, ArticleForm
+from .forms import RegisterUserForm, ArticleForm, LoginForm
 
 # Create your views here.
 
@@ -32,30 +34,35 @@ def registerPage (request):
     return render(request, 'accounts/register.html', context)
 
 
-def login(request):
+def login_user(request):
     if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            remember_me = form.cleaned_data['remember_me']
-            user = authenticated(username=username, password=password)
-            if user:
-                login(request, user)
-                if not remember_me:
-                    # <-- Here if the remember me is False, 
-                    # that is why expiry is set to 0 seconds. 
-                    # So it will automatically close the session
-                    # after the browser is closed.
-                    request.session.set_expiry(0)  
+        username = request.POST['username']
+        password = request.POST['password']
+        remember_me = request.POST.get('remember_me', False)
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('home')
+            if remember_me == False:
+                # <-- Here if the remember me is False, 
+                # that is why expiry is set to 0 seconds. 
+                # So it will automatically close the session
+                # after the browser is closed.
+                request.session.set_expiry(0)  
 
-                # else browser session will be as long as 
-                # the session cookie time "SESSION_COOKIE_AGE"
-                return redirect('/some/success/url')
+            # else browser session will be as long as 
+            # the session cookie time "SESSION_COOKIE_AGE"
+        else:
+            messages.success(request, "Error logging in")
+            return redirect('login')
     else:
-        form = LoginForm()
+        return render(request, 'login.html', {})
 
-        render(request, 'name.html', {'form': form})
+
+def logout_user(request):
+    logout(request)
+    return redirect('home')
+
 
 def home_section(request):
     return render(request, 'home.html', {})
@@ -110,8 +117,8 @@ def profile(request, *args, **kwargs):
 def graphsAndData(request, *args, **kwargs):
     return render(request, 'data.html', {})
 
-def messages(request, *args, **kwargs):
-    return render(request, 'messages.html', {})
+def inbox(request, *args, **kwargs):
+    return render(request, 'inbox.html', {})
 
 def settings_page(request, *args, **kwargs):
     user = request.user

@@ -19,17 +19,20 @@ from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required
 from articles.views import (
                             trending_screen, 
                            articles_display,
                             read_article, profile, 
                             graphsAndData, 
                             favourites, 
-                            messages, 
+                            inbox, 
                             settings_page, 
                             user_file_manager,
                             make_article,
-                            home_section
+                            home_section,
+                            login_user,
+                            logout_user
                             )
 
 urlpatterns = [
@@ -48,17 +51,18 @@ urlpatterns = [
 #PROFILE URLS
 
     path('profile', profile, name='user_profile'),
+    path('profile', include('django.contrib.auth.urls')),
     # path('register'),
-    path('settings', settings_page, name='settings'),
-    path('files', user_file_manager, name='user_files'),
-    path('login', LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout', LogoutView.as_view(), name='logout'),
+    path('profile/settings', settings_page, name='settings'),
+    path('profile/files', user_file_manager, name='user_files'),
+    path('login', login_user, name='login'),
+    path('logout', logout_user, name='logout'),
 
 #DATA
 
     path('graphs-and-data', graphsAndData, name='data'),
     path('favourites', favourites, name='liked_articles'),
-    path('messages', messages, name='messages'),
+    path('inbox', inbox, name='inbox'),
 
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
